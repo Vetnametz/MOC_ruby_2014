@@ -19,29 +19,27 @@ RESPONSE='{"person":{
 "pets":[{"name":"Mittens","species":"Felis silvestris catus"}]}
 }}'
 
-# RESPONSE='{"person":{
-# "personal_data":{"name": "John Smith", "gender":"male", "age":56 ......},
-# "social_profiles":["http://facebook....","http://twitter...","http://", .... ],
-# "additional_info":{"hobby":["pubsurfing","drinking","hiking"...],
-# "pets":[{"name":"Mittens","species":"Felis silvestris catus"},],...
-# }}'
-# response = RESPONSE.gsub(/(,\.)|(, \.)|\./,'')
-
 response = JSON.parse(RESPONSE)
+
+p response['person']['additional_info']['hobby']
 
 module PersonInformation
 
-  def adult(age)
+  def adult?(age)
     (age > 21) ? true : false
   end
 
-  def has_twitter(social)
+  def has_twitter?(social)
     social.each do |elem|
-      isTrue = elem == "http://twitter.com/john"
+      isTrue = (elem == "http://twitter.com/john")
       if isTrue
         return true
       end
     end
+  end
+
+  def has_hobbies?(hobbies)
+    hobbies.any?
   end
 
 end
@@ -51,7 +49,12 @@ if response.key?('person')
   person = person_object.new(*response["person"].values)
   person.extend(PersonInformation)
   age = person.personal_data['age']
-  p person.adult(age)
+  p age
+  p person.adult?(age)
   social = person.social_profiles
-  p person.has_twitter(social)
+  p social
+  p person.has_twitter?(social)
+  hobbies = person.additional_info['hobby']
+  p hobbies
+  p hobbies = person.has_hobbies?(hobbies)
 end
