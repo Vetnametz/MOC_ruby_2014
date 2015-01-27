@@ -21,8 +21,6 @@ RESPONSE='{"person":{
 
 response = JSON.parse(RESPONSE)
 
-p response['person']['additional_info']['hobby']
-
 module PersonInformation
 
   def adult?(age)
@@ -42,19 +40,35 @@ module PersonInformation
     hobbies.any?
   end
 
+  def create_pets(&block)
+    # TODO: go on from this palce
+    self.additional_info['pets'].each do |pet|
+      yield(pet)
+    end
+
+  end
+
 end
 
 if response.key?('person')
   person_object = Struct.new("Person", *response["person"].keys.collect(&:to_sym))
+  # p person_object.methods
   person = person_object.new(*response["person"].values)
   person.extend(PersonInformation)
   age = person.personal_data['age']
-  p age
-  p person.adult?(age)
+  # p age
+  # p person.adult?(age)
   social = person.social_profiles
-  p social
-  p person.has_twitter?(social)
+  # p social
+  # p person.has_twitter?(social)
   hobbies = person.additional_info['hobby']
-  p hobbies
-  p hobbies = person.has_hobbies?(hobbies)
+  # p hobbies
+  # p hobbies = person.has_hobbies?(hobbies)
+  pets = person.additional_info
+  # p pets
+  # p pets = person.create_pets()
+  person.create_pets(p "I`m glad to play on #{pet.values}")
+
+
+
 end
